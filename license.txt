@@ -1,5 +1,6 @@
 ﻿CodeRS - Atviras kodas Lietuvai
-Copyright (C) 2007 CodeRS www.coders.lt - projektas@gmail.com
+ANNO 2007
+Copyright (C) 2022 Mightmedia www.mightmedia.lt - aivaras.cenkus@gmail.com
 MightMedia TVS
 
 Ši programa yra laisva. Jūs galite ją platinti ir/arba modifikuoti
