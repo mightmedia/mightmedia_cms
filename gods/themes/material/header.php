@@ -43,23 +43,6 @@
 
     <!-- Jquery Core Js -->
     <script src="<?php echo adminUrl('themes/material/plugins/jquery/jquery.min.js'); ?>"></script>
-    <!-- treview -->
-    <link rel="stylesheet" href="<?php echo adminUrl('css/jquery.treeview.css'); ?>" />
-    <script src="<?php echo adminUrl('js/jquery.treeview.js'); ?>" type="text/javascript"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#treemenu").treeview({
-                persist: "location",
-                collapsed: true,
-                unique: true
-            });
-        });
-    </script>
-
-    <!-- Bootstrap Notify Plugin Js -->
-    <script src="<?php echo adminUrl('themes/material/plugins/bootstrap-notify/bootstrap-notify.js'); ?>"></script>
-    <!-- Jquery Nestable -->
-    <script src="<?php echo adminUrl('themes/material/plugins/nestable/jquery.nestable.js'); ?>"></script>
 </head>
 
 <body class="theme-deep-orange">

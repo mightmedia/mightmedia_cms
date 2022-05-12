@@ -42,8 +42,6 @@ class Routes {
 
 	public function newRoute($name, $params)
 	{
-		// d($name);
-		// $this->name = $name;
 		$this->setRoutes($name, $params);		
 		$this->route($name);
 	}
@@ -273,7 +271,7 @@ class Routes {
 				// 'root'		=> false,
 				// 'data'		=> null,
 				// 'header'	=> null,
-// $this->name = $name;
+
 		$data = $this->getRoute($name);
 
 		if(! $this->checkMethod($data['method'])){
@@ -335,9 +333,7 @@ class Routes {
 						$routePart		=> $this->requestUrlParts[$i],
 					];
 
-				}
-
-				
+				}				
 
 				$this->vars += [
 					'routeParam'	=> $routeParam,

@@ -46,6 +46,12 @@ class PostType {
 				],
 				// add defaults params
 			],
+			//todo
+			'permissions' => [
+				'view',
+				'create',
+				'edit',
+			]
 		];
 	}
 	

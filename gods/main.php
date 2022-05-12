@@ -4,6 +4,7 @@
 $loadSysFilesArray = [
 	'custom', // ?
 	'users',
+	'roles',
 	'media',
 	'pages',
 ];
@@ -29,8 +30,5 @@ if(! empty($headerData)) {
 //
 
 routeAjax('/' . ADMIN_DIR . '/ajax/$action');
-
-require 'themes/material/form.class.php'; // todo: remove?
-require 'themes/material/table.class.php'; // todo: remove?
 
 require 'themes/material/index.php';

@@ -94,6 +94,7 @@
                             <a href="forgot-password.html">Forgot Password?</a>
                         </div>
                     </div> -->
+					<?php echo CSRFinput(); ?>
                 </form>
             </div>
         </div>

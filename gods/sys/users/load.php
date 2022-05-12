@@ -3,17 +3,79 @@
 // add admin user page
 function userRoutes()
 {
-	get('/' . ADMIN_DIR . '/users', ADMIN_ROOT . 'sys/users/page.php', false);
+	// pagination
+	newRoute(
+		'users.list.pagination', 
+		[
+			'method'	=> 'get',
+			'route'		=> '/' . ADMIN_DIR . '/users/list/page/$page',
+			'include'	=> ADMIN_ROOT . 'sys/users/list.php',
+			'query'		=> [
+				'table' 		=> 'users',
+				'pagination'	=> true
+			],
+			'header'	=> [
+				'pageName' => 'Users'
+			],
+		]
+	);
+	// list
+	newRoute(
+		'users.list', 
+		[
+			'method'	=> 'get',
+			'route'		=> '/' . ADMIN_DIR . '/users/list',
+			'include'	=> ADMIN_ROOT . 'sys/users/list.php',
+			'query'		=> [
+				'table' 		=> 'users',
+				'pagination'	=> true
+			],
+			'header'	=> [
+				'pageName' => 'Users'
+			],
+		]
+	);
+	// edit
+	newRoute(
+		'users.edit', 
+		[
+			'method'	=> 'get',
+			'route'		=> '/' . ADMIN_DIR . '/users/edit/$id-$slug',
+			'include'	=> ADMIN_ROOT . 'sys/users/edit.php',
+			'query'		=> [
+				'table'	=> 'users',
+				'where' => [
+					'id' 	=> 'param.id',
+				],
+				'row' => true
+			],
+			'header'	=> [
+				'pageName' => 'Users'
+			],
+		]
+	);
 }
 
 addAction('adminRoutes', 'userRoutes');
 
 function userMenu($data)
 {
-// check if exists
+	$route = '/' . ADMIN_DIR . '/users';
+
 	$data['users'] = [
-		'url' 	=> '/' . ADMIN_DIR . '/users',
+		'url' 	=> $route,
 		'title' => 'Users',
+		'icon' 	=> 'person',
+		'sub'	=> [
+			[
+				'url' 	=> $route . '/list',
+				'title' => 'Users list',
+			],
+			[
+				'url' 	=> $route . '/create',
+				'title' => 'Users new',
+			]
+		]
 	];
 	
 	return $data;

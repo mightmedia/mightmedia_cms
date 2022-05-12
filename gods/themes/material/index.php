@@ -46,7 +46,7 @@
                     <li>
 						<?php if(isset($adminMenuItem['sub']) && ! empty($adminMenuItem['sub'])) { ?>
 							<a href="javascript:void(0);" class="menu-toggle">
-								<i class="material-icons"><?php echo ! empty($adminMenuItem['icon']) ? $adminMenuItem['icon'] : adminMenuIcon($id); ?></i>
+								<i class="material-icons"><?php echo ! empty($adminMenuItem['icon']) ? $adminMenuItem['icon'] : 'extension'; ?></i>
 								<span><?php echo $adminMenuItem['title']; ?></span>
 							</a>
 							<ul class="ml-menu">
@@ -60,7 +60,7 @@
 							</ul>
 						<?php } else { ?>
 							<a href="<?php echo $adminMenuItem['url']; ?>">
-								<i class="material-icons"><?php echo ! empty($adminMenuItem['icon']) ? $adminMenuItem['icon'] : adminMenuIcon($id); ?></i>
+								<i class="material-icons"><?php echo ! empty($adminMenuItem['icon']) ? $adminMenuItem['icon'] : 'extension'; ?></i>
 								<span><?php echo $adminMenuItem['title']; ?></span>
 							</a>
 						<?php } ?>

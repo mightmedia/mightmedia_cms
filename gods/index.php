@@ -19,9 +19,6 @@ foreach ($loadFuncFilesArray as $loadFuncFile) {
     require ADMIN_ROOT . 'functions/functions.' . $loadFuncFile . '.php';
 }
 
-require 'themes/material/config.php';
-require 'themes/material/functions.php';
-
 // add admin login check
 if (! empty(getSession('user')) && getSession('user')['level'] == 1 ) {
     include 'main.php';

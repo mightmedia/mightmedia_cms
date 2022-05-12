@@ -206,7 +206,7 @@ addAction('adminRoutes', 'pagesRoutes');
 function pagesMenu($data)
 {
 	$route = '/' . ADMIN_DIR . '/pages';
-// check if exists
+
 	$data['pages'] = [
 		'url' 	=> $route,
 		'title' => 'Pages',
