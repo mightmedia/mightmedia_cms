@@ -160,53 +160,83 @@ class Routes {
 
 	private function dbQuery($data)
 	{
-		if(isset($data['query']) && ! empty($data['query'])) {
-			
-			if(isset($data['query']['where'])) {
+		if(isset($data['query']) && ! empty($data['query'])) {	
 
-				foreach ($data['query']['where'] as $kWhere => $vWhere) {
-					if(preg_match("/^param/", $vWhere)) {
-						$where = ltrim($vWhere, '.param');
-						$data['query']['where'][$kWhere] = $this->vars[$where];
-					}
-				}
+			$this->getQueryData($data['query']);
 
+		} elseif(isset($data['queries']) && ! empty($data['queries'])) {	
+
+			foreach ($data['queries'] as $query) {
+				$this->getQueryData($query);
 			}
-		
-			if(isset($data['query']['pagination']) && $data['query']['pagination']) {
-				// load data from DB
-				$page = isset($this->vars['page']) ? (int)$this->vars['page'] : 1;
-
-				// TODO: add to config default pagination
-				$limit = isset($data['query']['limit']) ? $data['query']['limit'] : 2;
-
-				$offset = $limit * ($page - 1);
-
-				$totalRows = dbCount(
-					$data['query']['table'],
-					'id'
-				);
-		
-				$this->vars['totalPages'] = ceil($totalRows / $limit);
-				$this->vars['page'] = $page;
-			} else {
-				$limit = isset($data['query']['row']) && $data['query']['row'] ? 1 : 0;
-				$offset = null;
-			}
-
-			$funcName = isset($data['query']['row']) && $data['query']['row'] ? 'dbRow' : 'dbSelect';
-		
-			return $funcName(
-				$data['query']['table'],
-				isset($data['query']['where']) ? $data['query']['where'] : null,
-				isset($data['query']['columns']) ? $data['query']['columns'] : null,
-				$limit,
-				$offset
-			);	
 
 		}
 
 		return false;
+	}
+
+	private function getQueryData($query)
+	{
+		// where
+		if(isset($query['where'])) {
+
+			foreach ($query['where'] as $kWhere => $vWhere) {
+				// if i need get params from url to where closure
+				if(preg_match("/^param/", $vWhere)) {
+					$where = ltrim($vWhere, '.param');
+					$query['where'][$kWhere] = $this->vars[$where];
+				}
+			}
+
+		}
+
+		// pagination
+		if(isset($query['pagination']) && $query['pagination']) {
+			// load data from DB
+			$page = isset($this->vars['page']) ? (int)$this->vars['page'] : 1;
+
+			// TODO: add to config default pagination
+			$limit = isset($query['limit']) ? $query['limit'] : 2;
+
+			$offset = $limit * ($page - 1);
+
+			$totalRows = dbCount(
+				$query['table'],
+				'id'
+			);
+	
+			$this->vars['totalPages'] = ceil($totalRows / $limit);
+			$this->vars['page'] = $page;
+		} else {
+			$limit = isset($query['row']) && $query['row'] ? 1 : 0;
+			$offset = null;
+		}
+
+
+		// get data
+		if(isset($query['row']) && $query['row']) {
+			$getData = dbRow(
+				$query['table'],
+				isset($query['where']) ? $query['where'] : null,
+				isset($query['columns']) ? $query['columns'] : null
+			);	
+		} else {
+			$getData = dbSelect(
+				$query['table'],
+				isset($query['where']) ? $query['where'] : null,
+				isset($query['columns']) ? $query['columns'] : null,
+				$limit,
+				$offset,
+				isset($query['join']) ? $query['join'] : null
+			);	
+		}
+
+		// if seted `as`
+		if(isset($query['as']) && ! empty($query['as'])) {
+			$this->vars[$query['as']] = $getData;
+		} else {
+			$this->vars[$query['table']] = $getData;
+		}
 	}
 
 	public function loadPages() 
@@ -216,11 +246,7 @@ class Routes {
 
 		if($data['method'] == 'get') {
 			if($query = $this->dbQuery($data)) {
-				if(isset($data['query']['returnVar']) && ! empty($data['query']['returnVar'])) {
-					$this->vars[$data['query']['returnVar']] = $query;
-				} else {
-					$this->vars[$data['query']['table']] = $query;
-				}
+				// todo
 			}
 
 			if(isset($data['data']) && ! empty($data['data'])) {

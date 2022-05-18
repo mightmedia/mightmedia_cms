@@ -104,28 +104,65 @@ function dbDelete($table, $data = [])
  * dbSelect
  *
  * @param  string $table
- * @param  mixed $where
- * @param  mixed $columns
+ * @param  array $where
+ * @param  array $columns
  * @param  int $limit
  * @param  mixed $offset
- * @return mixed
+ * @param  array $joins
+ * @return null|array
  */
-function dbSelect(string $table, array $where = null, array $columns = null, $limit = 0, $offset = null)
+function dbSelect(
+	string $table, 
+	array $where = null, 
+	array $columns = null, 
+	$limit = 0, 
+	$offset = null,
+	array $joins = null
+)
 {
 	global $mmdb;
 
 	$string = '';
-	$i 		= 0;
+
+	if (! empty($joins)) {
+		
+		// [
+		// 	'type' 	=> 'left',
+		// 	'table' => 'permissions',
+		// 	'on' 	=> 'permissions.id=role_permissions.permission_id',
+		// ]
+
+		$types = [
+			'left' 		=> 'LEFT JOIN',
+			'inner' 	=> 'INNER JOIN', // todo
+			'right' 	=> 'RIGHT JOIN', // todo
+		];
+			
+		
+		foreach ($joins as $join) {
+
+			if(isset($types[$join['type']])) {
+				$string .= " " . $types[$join['type']] . " `" . $join['table'] . "` ON " . $join['on'];
+			}
+		}
+	}
+
+	$i	= 0;
 
 	if (! empty($where)) {
 		
 		foreach ($where as $column => $value) {
 			$i++;
 
+			// check if it has dot << joins crash fix
+			if(! preg_match("/[.]/", $column)) {
+				$column = "`" . $column . "`";
+			}
+
 			if($i == 1) {
-				$string .= " WHERE `" . $column . "` = '" . $value . "'";
+				$string .= " WHERE " . $column . " = '" . $value . "'";
 			} else {
-				$string .= " AND `" . $column . "` = '" . $value . "'";
+				$string .= " AND " . $column . " = '" . $value . "'";
 			}
 		}
 	}

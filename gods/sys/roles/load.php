@@ -35,6 +35,8 @@ function roleRoutes()
 			],
 		]
 	);
+
+	// todo: add callback to filter query data
 	// edit
 	newRoute(
 		'roles.edit', 
@@ -42,12 +44,53 @@ function roleRoutes()
 			'method'	=> 'get',
 			'route'		=> '/' . ADMIN_DIR . '/roles/edit/$id-$slug',
 			'include'	=> ADMIN_ROOT . 'sys/roles/edit.php',
-			'query'		=> [
-				'table'	=> 'roles',
-				'where' => [
-					'id' 	=> 'param.id',
+			'queries'	=> [
+				[
+					'table'	=> 'roles',
+					'where' => [
+						'id' 	=> 'param.id',
+					],
+					'row' => true
 				],
-				'row' => true
+				[
+					'table'		=> 'role_permissions',
+					'columns'	=> [
+						'permissions.*'
+					],
+					'join'		=> [
+						[
+							'type' 	=> 'left',
+							'table' => 'permissions',
+							'on' 	=> 'permissions.id=role_permissions.permission_id',
+						]
+					],
+					'where' 	=> [
+						'role_permissions.role_id' 	=> 'param.id',
+					],
+					'as'		=> 'selectedPermissions', // variable name in view
+					// 'filter'	=> 'selectedPermissions', // filter query data
+				],
+				[
+					'table'	=> 'permissions',
+				]
+			],
+			'header'	=> [
+				'pageName' => 'roles'
+			],
+		]
+	);
+
+	// create
+	newRoute(
+		'roles.edit', 
+		[
+			'method'	=> 'get',
+			'route'		=> '/' . ADMIN_DIR . '/roles/create',
+			'include'	=> ADMIN_ROOT . 'sys/roles/create.php',
+			'queries'	=> [
+				[
+					'table'	=> 'permissions',
+				]
 			],
 			'header'	=> [
 				'pageName' => 'roles'

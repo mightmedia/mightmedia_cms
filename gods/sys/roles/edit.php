@@ -26,11 +26,36 @@
 						</div>
 					</div>
 
-					<select id="optgroup" class="ms" multiple="multiple">
-                                <optgroup label="Alaskan/Hawaiian Time Zone">
-                                    <option value="AK">Alaska</option>
-                                    <option value="HI">Hawaii</option>
-                                </optgroup>
+					<?php
+						array_map(function($arr) use(&$output) {
+						
+							$output[$arr['id']] = $arr;
+
+						}, $selectedPermissions);
+
+						foreach ($permissions as $g) {
+							$groupedPermissions[$g['group']][$g['id']]['name'] = $g['name'];
+
+							if(isset($output[$g['id']])) {
+								$groupedPermissions[$g['group']][$g['id']]['selected'] = true;
+							} else {
+								$groupedPermissions[$g['group']][$g['id']]['selected'] = false;
+							}
+						}
+
+					?>
+					<label for="permissions">Permissions</label>
+					<select name="permissions" id="optgroup" class="ms" multiple="multiple">
+						<?php foreach ($groupedPermissions as $group => $permissions) { ?>
+							<optgroup label="<?php echo $group; ?>">
+								<?php foreach ($permissions as $id => $permission) { ?>
+									<option value="<?php echo $id; ?>"<?php echo $permission['selected'] ? ' selected' : ''; ?>>
+										<?php echo $permission['name']; ?>
+									</option>
+								<?php } ?>
+							</optgroup>
+						<?php } ?>
+                                
 					</select>
 
 					<br>
